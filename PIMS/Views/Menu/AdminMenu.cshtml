@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "AdminMenu";
+}
+
+<h2>Administrator Dashboard</h2>
+<hr/>
+@if (ViewBag.Message != null)
+{
+    <h4 class="created-message">@ViewBag.Message</h4>
+    <br/>
+}
+
+<ul>
+    <li>@Html.ActionLink("Register Doctor", "RegisterDoctor", "Account")</li>
+    <li>@Html.ActionLink("Register Patient", "RegisterPatient", "Account", new { isSelfRegistered = false }, null)</li>
+    <li>@Html.ActionLink("Register Other Staff Member", "RegisterStaffMember", "Account")</li>
+</ul>
+
+<style>
+    .created-message {
+        color: green;
+    }
+</style>
+
+
+

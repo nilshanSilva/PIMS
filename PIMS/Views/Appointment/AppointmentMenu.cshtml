@@ -1,0 +1,149 @@
+﻿@model PIMS.Models.ViewModels.AppointmentViewModel
+@{
+    ViewBag.Title = "AppointmentMenu";
+}
+
+<h2>Patient Menu</h2>
+<hr />
+@Html.Partial("_SearchMember", Model)
+
+@if (Model.Doctor != null && Model.IsDateSubmitted == false)
+{
+    using (Html.BeginForm("SubmitAppointmentDetails", "Appointment", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.ChannelDate, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(m => m.ChannelDate, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ChannelDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @Html.Hidden("PatientId", Model.Patient.Id)
+
+            @Html.Hidden("DoctorId", Model.Doctor.Id)
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="View Time" class="btn btn-default" />
+                </div>
+            </div>
+
+        </div>
+    }
+
+}
+else
+{
+    if (Model.IsDateSubmitted)
+    {
+        <hr />
+    <h4>Appointment Details</h4>
+        if (ViewBag.AppointmentMessage != null)
+        {
+            if (ViewBag.AppointmentMessage == "Unavailable")
+            {
+            <p class="appointment-message-unavailable">The doctor is Unavailable for the Next 2 days</p>
+            }
+            else
+            {
+                if (ViewBag.AppointmentMessage == "Available")
+                {
+            <p class="appointment-message-available">A slot is Available on your Preferred Day</p>
+                }
+                else if (ViewBag.AppointmentMessage == "Next-Day-Available")
+                {
+                <p class="appointment-message-available">A slot is Available on the Next Day</p>
+                }
+
+            <div>
+                <dl class="dl-horizontal">
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ChannelDate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ChannelDate)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ChannelTime)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ChannelTime)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ChannelNumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ChannelNumber)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Doctor.ChannelFee)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Doctor.ChannelFee)
+                    </dd>
+
+
+                </dl>
+            </div>
+
+                if (Model.IsConfirmed == false)
+                {
+                    using (Html.BeginForm("ConfirmAppointment", "Appointment", FormMethod.Post))
+                    {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+
+                        @Html.Hidden("PatientId", Model.Patient.Id)
+                        @Html.Hidden("DoctorId", Model.Doctor.Id)
+                        @Html.Hidden("ChannelDate", Model.ChannelDate)
+                        @Html.Hidden("ChannelTime", Model.ChannelTime)
+                        @Html.Hidden("ChannelNumber", Model.ChannelNumber)
+                        @Html.Hidden("ChannelNum", Model.ChannelNum)
+
+                        @Html.Hidden("IsDateSubmitted", Model.IsDateSubmitted)
+                        @Html.Hidden("IsConfirmed", Model.IsConfirmed)
+                        @Html.Hidden("ViewBagMessage", (string) ViewBag.AppointmentMessage)
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Confirm Appointment" class="btn btn-default" />
+                            </div>
+                        </div>
+
+                    </div>
+                    }
+                }
+                else
+                {
+                    <h4>Appointment Number: @Model.ChannelNumber</h4>
+                    <h3>Reference Number: @Model.ReferenceNumber</h3>
+                }
+
+
+            }
+        }
+    }
+}
+ <style>
+.appointment-message-available {
+      color: green;
+       }
+.appointment-message-unavailable {
+      color: red;
+      }
+</style>
+
+
+

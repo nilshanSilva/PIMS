@@ -1,0 +1,38 @@
+﻿@model IEnumerable<PIMS.Models.Drug>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Drugs</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @if (ViewBag.Context == "pharmacist-view-details")
+            {
+                <h4>@Html.ActionLink(item.BrandName, "Details", new { Id = item.Id }, null)</h4>
+                @Html.DisplayFor(modelItem => item.GenericName)
+            }
+            else if (ViewBag.Context == "pharmacist-update-stock")
+            {
+                <h4>@Html.ActionLink(item.BrandName, "UpdateStock", new { Id = item.Id }, null)</h4>
+                @Html.DisplayFor(modelItem => item.GenericName)
+            }
+        </td>
+    </tr>
+
+
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>*@
+}
+
+</table>

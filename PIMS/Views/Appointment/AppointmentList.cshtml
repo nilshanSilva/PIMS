@@ -1,0 +1,13 @@
+﻿@model List<PIMS.Models.ViewModels.AppointmentViewModel>
+@{
+    ViewBag.Title = "AppointmentList";
+}
+
+<h2>Appointments</h2>
+<ul>
+@foreach(var item in Model)
+{
+<li>@Html.ActionLink(item.Patient.FirstName + " " + item.Patient.Surname + " (" + item.ChannelNumber + ")",
+    "SelectAppointment", "Appointment", new { appointmentId = item.ReferenceNumber, role = ViewBag.Role }, null)</li>
+}
+ </ul>

@@ -135,35 +135,54 @@ namespace PIMS.Controllers
         }
 
         //
-        // GET: /Account/Register
+        // GET: /Account/RegisterStaffMember
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult RegisterStaffMember()
         {
             return View();
         }
 
         //
-        // POST: /Account/Register
+        // POST: /Account/RegisterStaffMember
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> RegisterStaffMember(RegisterStaffMemberViewModel model)
         {
+            ModelState.Remove("JoinedAt");
+
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new StaffMember
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    Surname = model.Surname,
+                    BirthDate = model.BirthDate,
+                    Gender = model.Gender,
+                    ContactNumber = model.ContactNumber,
+                    NIC = model.NIC,
+                    JoinedAt = DateTime.UtcNow,
+
+                    UserLevel = model.UserLevel
+                };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await UserManager.AddToRoleAsync(user.Id, model.UserLevel.ToString());
+
+                    //  await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("AdminMenu", "Menu", new { message = model.UserLevel.ToString().Replace("_"," ") 
+                           + " Registered Successfully" });
                 }
                 AddErrors(result);
             }
@@ -171,6 +190,116 @@ namespace PIMS.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+
+        //
+        // GET: /Account/RegisterDoctor
+        [AllowAnonymous]
+        public ActionResult RegisterDoctor()
+        {
+            return View();
+        }
+
+
+        // POST: /Account/RegisterDoctor
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterDoctor(RegisterDoctorViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new Doctor
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    Surname = model.Surname,
+                    BirthDate = model.BirthDate,
+                    Gender = model.Gender,
+                    ContactNumber = model.ContactNumber,
+                    NIC = model.NIC,
+                    JoinedAt = DateTime.UtcNow,
+
+                   Specialization = model.Specialization,
+                   Qualification = model.Qualification,
+                   ChannelFee = model.ChannelFee,
+                   ChannelStartTime = model.ChannelStartTime,
+                   AverageChannelDuration = model.AverageChannelDuration,
+                   ChannelEndTime = model.ChannelEndTime,
+                   NumOfPatientsPerDay = (int)((model.ChannelEndTime -
+                   model.ChannelStartTime).TotalMinutes)/model.AverageChannelDuration,
+                   Room = model.Room
+                };
+
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(user.Id, "Doctor");
+
+                    return RedirectToAction("AdminMenu", "Menu", new { message = "Doctor Registered Successfully" });
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+
+        //
+        // GET: /Account/RegisterPatient
+        [AllowAnonymous]
+        public ActionResult RegisterPatient(bool isSelfRegistered)
+        {
+            ViewBag.IsSelfRegistered = isSelfRegistered;
+            return View();
+        }
+
+        // POST: /Account/RegisterDoctor
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterPatient(RegisterPatientViewModel model, bool IsSelfRegistered)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new Patient
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    Surname = model.Surname,
+                    BirthDate = model.BirthDate,
+                    Gender = model.Gender,
+                    ContactNumber = model.ContactNumber,
+                    NIC = model.NIC,
+                    JoinedAt = DateTime.UtcNow,
+
+                    City = model.City,
+                    Address = model.Address
+                };
+
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(user.Id, "Doctor");
+
+                    if(IsSelfRegistered)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    return RedirectToAction("AdminMenu", "Menu", new { message = "Patient Registered Successfully" });
+                    
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
 
         //
         // GET: /Account/ConfirmEmail

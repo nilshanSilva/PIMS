@@ -1,0 +1,86 @@
+﻿@model PIMS.Models.ViewModels.AppointmentViewModel
+@{
+    ViewBag.Title = "_SearchMember";
+}
+
+
+@if (Model.Patient == null)
+{
+    <h4>Select Patient</h4>
+    <ul>
+        @foreach (var item in Model.Patients)
+        {
+        <li>
+        @Html.ActionLink(item.FirstName + " " + item.Surname + " (" + item.Id.ToString() + ")", "SelectPatient", new { patientId = item.Id });
+        </li>
+            }
+    </ul>
+}
+else /*Only if Patient is Present, Select Doctor*/
+{
+    if (Model.Doctor == null)
+    {
+
+        <h4>Select Doctor</h4>
+
+        @*@using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <h4>Select Doctor</h4>
+
+
+            }*@
+<ul>
+    @foreach (var item in Model.Doctors)
+    {
+    <li>
+        @Html.ActionLink(item.FirstName + " " + item.Surname + " - " + item.Specialization.ToString(), "SelectDoctor", new { patientId = Model.Patient.Id, doctorId = item.Id });
+       </li>
+    }
+    </ul>
+    }
+    else
+    {
+        string name = Model.Doctor.FirstName + " " + Model.Doctor.Surname;
+
+        <h4>Doctor Details</h4>
+
+        <div>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.DoctorName)
+                </dt>
+
+                <dd>
+                    <p>@name</p>
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Doctor.Specialization)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Doctor.Specialization)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Doctor.ChannelStartTime)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Doctor.ChannelStartTime)
+                </dd>
+
+
+
+
+            </dl>
+        </div>
+    }
+
+}
+
+
+
+

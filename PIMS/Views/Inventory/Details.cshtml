@@ -1,0 +1,114 @@
+﻿@model PIMS.Models.Drug
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Drug</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.GenericName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GenericName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BrandName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BrandName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NetContent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NetContent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+
+        <dd>
+           <p>@ViewBag.Category</p>
+        </dd>   
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DrugForm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DrugForm)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RecievedPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecievedPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RetailPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RetailPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SupplierName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SupplierName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReOrderLevel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReOrderLevel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shelf)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shelf)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Update Stock", "UpdateStock", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index", new { context = "pharmacist-view-details" })
+</p>

@@ -1,0 +1,139 @@
+﻿@model PIMS.Models.ViewModels.PrescriptionViewModel
+@{
+    ViewBag.Title = "ViewPrescription";
+}
+
+@{ 
+    string presName = "Prescription";
+    if (ViewBag.Role == "cashier")
+    {
+        presName = "Prescription Bill";
+    }
+}
+
+<h3>@presName - @Model.PatientName</h3>
+<hr/>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DrugItems.FirstOrDefault().Drug.BrandName)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.DrugItems.FirstOrDefault().Price)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.DrugItems.FirstOrDefault().OrderQuantity)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.DrugItems.FirstOrDefault().Total)
+        </th>
+    </tr>
+
+    @foreach (var item in Model.DrugItems)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Drug.BrandName)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderQuantity)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+
+        </tr>
+    }
+
+    <tr>
+        <td></td>
+        <td></td>
+        <td>
+            <h4 align="right">Sub-Total : </h4>
+        </td>
+        <td>
+            <h4>$ @Model.SubTotal</h4>
+        </td>
+    </tr>
+
+</table>
+
+@if (ViewBag.Role == "cashier")
+{
+    if (Model.IsPaid == false)
+    {
+        using (Html.BeginForm("ConfirmPrescriptionCharge", "Prescription", FormMethod.Post))
+        {
+        @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+ 
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PaymentType, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EnumDropDownListFor(model => model.PaymentType, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PaymentType, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @Html.Hidden("prescriptionId", Model.PrescriptionId)
+                @Html.Hidden("subTotal", Model.SubTotal)
+      
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Pay and Confirm" class="btn btn-default" />
+                    </div>
+                </div>
+
+            </div>
+        }
+    }
+    else //if paid
+    {
+        <h4 class = "payment-message">Payment Successfull</h4>
+        @Html.ActionLink("Back to Queue", "PayPrescriptionCharges","Prescription")
+    }
+
+}
+else if (ViewBag.Role == "pharmacist")
+{
+    if (Model.IsCleared == false)
+    {
+
+        <div class="checkout">
+            @Html.ActionLink("Issue", "ClearPrescription", "Prescription", new { prescriptionId = Model.PrescriptionId, subTotal = Model.SubTotal }, new { @class = "btn btn-primary btn-large" })
+        </div>
+
+    }
+    else //if IsCleared
+    {
+        <h4 class="payment-message">Prescription Cleared Successfully</h4>
+        @Html.ActionLink("Back to Queue", "IssueDrugs", "Prescription")
+    }
+}
+
+
+ <style>
+.checkout {
+text-align: right;
+margin-right: 190px;
+}
+
+     .payment-message {
+         color: green;
+     }
+</style>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

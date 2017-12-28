@@ -190,14 +190,74 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\PrescriptionController.cs" />
+    <Compile Include="FirstRun.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712220932588_intial.cs" />
+    <Compile Include="Migrations\201712220932588_intial.Designer.cs">
+      <DependentUpon>201712220932588_intial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712240705209_employees.cs" />
+    <Compile Include="Migrations\201712240705209_employees.Designer.cs">
+      <DependentUpon>201712240705209_employees.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712251801142_drugs.cs" />
+    <Compile Include="Migrations\201712251801142_drugs.Designer.cs">
+      <DependentUpon>201712251801142_drugs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712261826361_drugedit.cs" />
+    <Compile Include="Migrations\201712261826361_drugedit.Designer.cs">
+      <DependentUpon>201712261826361_drugedit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712270456122_appointments.cs" />
+    <Compile Include="Migrations\201712270456122_appointments.Designer.cs">
+      <DependentUpon>201712270456122_appointments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712270458464_channel.cs" />
+    <Compile Include="Migrations\201712270458464_channel.Designer.cs">
+      <DependentUpon>201712270458464_channel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712270511443_dataappont.cs" />
+    <Compile Include="Migrations\201712270511443_dataappont.Designer.cs">
+      <DependentUpon>201712270511443_dataappont.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712272229223_appointment-date.cs" />
+    <Compile Include="Migrations\201712272229223_appointment-date.Designer.cs">
+      <DependentUpon>201712272229223_appointment-date.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712280455235_appointmentIsChanneled.cs" />
+    <Compile Include="Migrations\201712280455235_appointmentIsChanneled.Designer.cs">
+      <DependentUpon>201712280455235_appointmentIsChanneled.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712280617063_presc.cs" />
+    <Compile Include="Migrations\201712280617063_presc.Designer.cs">
+      <DependentUpon>201712280617063_presc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712281412205_prescriptionchange.cs" />
+    <Compile Include="Migrations\201712281412205_prescriptionchange.Designer.cs">
+      <DependentUpon>201712281412205_prescriptionchange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712282107046_paymenton.cs" />
+    <Compile Include="Migrations\201712282107046_paymenton.Designer.cs">
+      <DependentUpon>201712282107046_paymenton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Appointment.cs" />
+    <Compile Include="Models\Drug.cs" />
+    <Compile Include="Models\Employees.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Prescription.cs" />
+    <Compile Include="Models\ViewModels\AppointmentViewModel.cs" />
+    <Compile Include="Models\ViewModels\PrescriptionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -224,7 +284,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -245,7 +307,7 @@
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\RegisterStaffMember.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\SendCode.cshtml" />
@@ -258,6 +320,23 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Account\RegisterDoctor.cshtml" />
+    <Content Include="Views\Account\RegisterPatient.cshtml" />
+    <Content Include="Views\Menu\AdminMenu.cshtml" />
+    <Content Include="Views\Menu\DoctorMenu.cshtml" />
+    <Content Include="Views\Menu\PharmacistMenu.cshtml" />
+    <Content Include="Views\Inventory\Create.cshtml" />
+    <Content Include="Views\Inventory\Details.cshtml" />
+    <Content Include="Views\Inventory\UpdateStock.cshtml" />
+    <Content Include="Views\Inventory\Index.cshtml" />
+    <Content Include="Views\Menu\CashierMenu.cshtml" />
+    <Content Include="Views\Appointment\_SearchMember.cshtml" />
+    <Content Include="Views\Appointment\AppointmentMenu.cshtml" />
+    <Content Include="Views\Appointment\AppointmentList.cshtml" />
+    <Content Include="Views\Appointment\ViewAppointment.cshtml" />
+    <Content Include="Views\Prescription\CreatePrescription.cshtml" />
+    <Content Include="Views\Prescription\PrescriptionList.cshtml" />
+    <Content Include="Views\Prescription\ViewPrescription.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -274,6 +353,44 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201712220932588_intial.resx">
+      <DependentUpon>201712220932588_intial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712240705209_employees.resx">
+      <DependentUpon>201712240705209_employees.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712251801142_drugs.resx">
+      <DependentUpon>201712251801142_drugs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712261826361_drugedit.resx">
+      <DependentUpon>201712261826361_drugedit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712270456122_appointments.resx">
+      <DependentUpon>201712270456122_appointments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712270458464_channel.resx">
+      <DependentUpon>201712270458464_channel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712270511443_dataappont.resx">
+      <DependentUpon>201712270511443_dataappont.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712272229223_appointment-date.resx">
+      <DependentUpon>201712272229223_appointment-date.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712280455235_appointmentIsChanneled.resx">
+      <DependentUpon>201712280455235_appointmentIsChanneled.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712280617063_presc.resx">
+      <DependentUpon>201712280617063_presc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712281412205_prescriptionchange.resx">
+      <DependentUpon>201712281412205_prescriptionchange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712282107046_paymenton.resx">
+      <DependentUpon>201712282107046_paymenton.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

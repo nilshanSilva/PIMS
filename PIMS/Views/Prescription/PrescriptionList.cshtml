@@ -1,0 +1,44 @@
+﻿@model List<PIMS.Models.ViewModels.PrescriptionViewModel>
+@{
+    ViewBag.Title = "PrescriptionList";
+}
+
+<h2>Prescriptions</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().PatientName)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().PrescriptionId)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().AppointmentReference)
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.PatientName, "SelectPrescription", "Prescription", new { prescriptionId = item.PrescriptionId, role = ViewBag.Role}, null)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.PrescriptionId)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.AppointmentReference)
+            </td>
+
+        </tr>
+    }
+
+</table>
+
+
+

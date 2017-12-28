@@ -1,0 +1,118 @@
+﻿@model PIMS.Models.ViewModels.PrescriptionViewModel
+@{
+    ViewBag.Title = "CreatePrescription";
+}
+
+<h2>Create Prescription</h2>
+<hr/>
+
+<h3>Add Drugs</h3>
+
+@if (Model.DrugItems != null)
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DrugItems[0].Drug.BrandName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.DrugItems[0].OrderQuantity)
+            </th>
+        </tr>
+
+        @foreach (var item in Model.DrugItems)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Drug.BrandName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderQuantity)
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}
+
+
+@if (Model.Drug != null)
+{
+    using (Html.BeginForm("AddDrugItem", "Prescription", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+
+            @Html.DisplayFor(m => m.Drug.BrandName)
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Quantity, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control" })
+                </div>
+            </div>
+
+            @Html.Hidden("drugId", Model.Drug.Id)
+            @Html.Hidden("appointId", Model.AppointmentReference)
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default" value="Add Drug" />
+                </div>
+            </div>
+
+        </div>
+    }
+}
+
+<h4>Select Drug</h4>
+<ul>
+    @foreach (var item in Model.Drugs)
+            {
+        <li>
+            @Html.ActionLink(item.BrandName, "SelectDrug", "Prescription", new { appointId = Model.AppointmentReference, drugId = item.Id }, null)
+        </li>
+    }
+</ul>
+<hr/>
+
+
+
+
+        @using (Html.BeginForm("FinishPrescription", "Prescription", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Disease, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Disease, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Description, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                @Html.Hidden("AppointmentReference", Model.AppointmentReference)
+                @Html.Hidden("DoctorId", Model.DoctorId)
+                @Html.Hidden("PatientId", Model.PatientId)
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default" value="Generate" />
+                    </div>
+                </div>
+
+
+            </div>
+
+        }

@@ -1,0 +1,133 @@
+﻿@model PIMS.Models.ViewModels.AppointmentViewModel
+@{
+    ViewBag.Title = "ViewAppointment";
+}
+
+<h2>Appointment - @Model.Patient.FirstName @Model.Patient.Surname</h2>
+<hr/>
+
+<div>
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReferenceNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReferenceNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ChannelNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ChannelNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ChannelDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ChannelDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Doctor.ChannelFee)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Doctor.ChannelFee)
+        </dd>
+
+
+    </dl>
+</div>
+
+@if (ViewBag.Role != null)
+{
+    if (ViewBag.Role == "cashier")
+    {
+        if (Model.IsPaid == false)
+        {
+            using (Html.BeginForm("UpdateAppointment", "Appointment", FormMethod.Post))
+            {
+            @Html.AntiForgeryToken()
+             <div class="form-horizontal">
+
+                 @Html.Hidden("ReferenceNumber", Model.ReferenceNumber)
+                 @Html.Hidden("ChannelNumber", Model.ChannelNumber)
+                 @Html.Hidden("PatientId", Model.Patient.Id)
+                 @Html.Hidden("DoctorId", Model.Doctor.Id)
+                 @Html.Hidden("ChannelDate", Model.ChannelDate)
+                 @Html.Hidden("ChannelFee", Model.ChannelFee)
+                 @Html.Hidden("ViewBagMessage", (string)ViewBag.Role)
+                 @Html.Hidden("IsPaid", true)
+                 @Html.Hidden("IsChanneled", false)
+
+                 <div class="form-group">
+                     <div class="col-md-offset-2 col-md-10">
+                         <input type="submit" value="Pay and Confirm" class="btn btn-default" />
+                     </div>
+                 </div>
+             </div>
+            }
+        }
+        else //If Paid
+        {
+            <h4 class="payment-message">Payment Successfull</h4>
+            @Html.ActionLink("View Remaining Appointments", "PayAppointmentBill", "Appointment");
+        }
+    }
+    else if (ViewBag.Role == "doctor")
+    {
+        if (Model.IsChanneled == false)
+        {
+
+            if (Model.IsPrescriptionGenerated == false)
+            {
+                @Html.ActionLink("Generate Prescription", "CreatePrescription", "Prescription", new { appointId = Model.ReferenceNumber}, null)
+            }
+            else
+            {
+                <h5 class="payment-message">The Prescription Saved Successfully</h5>
+                using (Html.BeginForm("UpdateAppointment", "Appointment", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+
+                        @Html.Hidden("ReferenceNumber", Model.ReferenceNumber)
+                        @Html.Hidden("ChannelNumber", Model.ChannelNumber)
+                        @Html.Hidden("PatientId", Model.Patient.Id)
+                        @Html.Hidden("DoctorId", Model.Doctor.Id)
+                        @Html.Hidden("ChannelDate", Model.ChannelDate)
+                        @Html.Hidden("ChannelFee", Model.ChannelFee)
+                        @Html.Hidden("ViewBagMessage", (string)ViewBag.Role)
+                        @Html.Hidden("IsPaid", true)
+                        @Html.Hidden("IsChanneled", true)
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Finish Appointment" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+        else //If IsChanneled
+        {
+            <h4 class="payment-message">Channel Completed</h4>
+
+             @Html.ActionLink("View Remaining Channels", "MarkChannel", "Appointment");
+        }
+    }
+}
+
+
+    <style>
+        .payment-message {
+            color: green;
+        }
+    </style>
