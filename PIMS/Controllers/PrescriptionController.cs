@@ -217,10 +217,35 @@ namespace PIMS.Controllers
 
         public ActionResult ClearPrescription(int prescriptionId, double subTotal)
         {
-            Prescription prescription = db.Prescriptions.Include(pa => pa.Patient).Where(p => p.Id == prescriptionId).FirstOrDefault();
+            Prescription prescription = db.Prescriptions.Include(pa => pa.Patient)
+                .Where(p => p.Id == prescriptionId).FirstOrDefault();
+
+            List<DrugItem> drugItems = db.DrugItems.Include(d => d.Drug)
+           .Where(p => p.ReferenceNumber == prescription.AppointmentReference).ToList();
+
+            string outOfStockMessage = null;
+
+            foreach (DrugItem item in drugItems)
+            {
+                Drug drugInStock = db.Drugs.Find(item.Drug.Id);
+                if(drugInStock.Quantity < item.OrderQuantity)
+                {
+                    outOfStockMessage = "There are only " + drugInStock.Quantity + " items of " + item.Drug.BrandName + " remaining in stock";
+                    break;
+                }
+                else
+                {
+                    drugInStock.Quantity = drugInStock.Quantity - item.OrderQuantity;
+                }
+            }
+
             prescription.IsPaid = true;
-            prescription.IsCleared = true;
-            db.SaveChanges();
+            if (outOfStockMessage == null)
+            {
+                prescription.IsCleared = true;
+                db.SaveChanges();
+            }
+
 
             PrescriptionViewModel PresVM = new PrescriptionViewModel();
             PresVM.DrugItems = db.DrugItems.Include(d => d.Drug)
@@ -229,9 +254,10 @@ namespace PIMS.Controllers
             PresVM.PatientName = prescription.Patient.FirstName + " " + prescription.Patient.Surname;
             PresVM.PrescriptionId = prescriptionId;
             PresVM.IsPaid = true;
-            PresVM.IsCleared = true;
+            PresVM.IsCleared = prescription.IsCleared;
             PresVM.SubTotal = subTotal;
             ViewBag.Role = "pharmacist";
+            ViewBag.StockMessage = outOfStockMessage;
 
             return View("ViewPrescription", PresVM);
         }

@@ -112,6 +112,11 @@ else if (ViewBag.Role == "pharmacist")
             @Html.ActionLink("Issue", "ClearPrescription", "Prescription", new { prescriptionId = Model.PrescriptionId, subTotal = Model.SubTotal }, new { @class = "btn btn-primary btn-large" })
         </div>
 
+        if(ViewBag.StockMessage != null)
+        {
+            <h4 class="out-of-stock-message">@ViewBag.StockMessage</h4>
+        }
+
     }
     else //if IsCleared
     {
@@ -129,6 +134,10 @@ margin-right: 190px;
 
      .payment-message {
          color: green;
+     }
+
+     .out-of-stock-message {
+         color: red;
      }
 </style>
 
