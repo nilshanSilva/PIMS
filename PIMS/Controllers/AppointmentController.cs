@@ -255,16 +255,37 @@ namespace PIMS.Controllers
         
 
         public ActionResult UpdateAppointment([Bind(Include = "ReferenceNumber,PatientId, DoctorId, ChannelDate, ChannelTime, ChannelNumber," +
-            "ChannelFee,ViewBagMessage, IsPaid, IsChanneled, IsPrescriptionGenerated")] AppointmentViewModel appointmentDetails)
+            "ChannelFee,ViewBagMessage, IsPaid, IsChanneled, IsPrescriptionGenerated")] AppointmentViewModel appointmentDetails, bool? IsCancelRequested)
         {
             appointmentDetails.Doctor = db.Doctors.Find(appointmentDetails.DoctorId);
             appointmentDetails.Patient = db.Patients.Find(appointmentDetails.PatientId);
 
             Appointment appointmentInDb = db.Appointments.Find(appointmentDetails.ReferenceNumber);
-            appointmentInDb.IsPaid = appointmentDetails.IsPaid;
-            appointmentInDb.IsChanneled = appointmentDetails.IsChanneled;
-            db.SaveChanges();
 
+            if (IsCancelRequested != null && (bool)IsCancelRequested)
+            {
+                DateTime cancelTime = DateTime.Now.AddHours(2);
+                DateTime channelTime = appointmentInDb.ChannelDate
+                    .AddHours(appointmentDetails.Doctor.ChannelStartTime.Hour)
+                    .AddMinutes(appointmentDetails.Doctor.ChannelStartTime.Minute);
+
+                if (cancelTime < channelTime)
+                {
+                    ViewBag.IsCancelled = true;
+                    db.Appointments.Remove(appointmentInDb);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    ViewBag.IsCancelled = false;
+                }
+            }
+            else
+            {
+                appointmentInDb.IsPaid = appointmentDetails.IsPaid;
+                appointmentInDb.IsChanneled = appointmentDetails.IsChanneled;
+                db.SaveChanges();
+            }
             ViewBag.Role = appointmentDetails.ViewBagMessage;
             return View("ViewAppointment", appointmentDetails);
         }
@@ -365,6 +386,41 @@ namespace PIMS.Controllers
                 appVM.IsPrescriptionGenerated = (bool) IsPrescriptionPresent;
             }
             return View("ViewAppointment", appVM);
+        }
+
+        public ActionResult PatientAppointments(string patientId, string role)
+        {
+            DateTime yesterday = DateTime.Today.AddDays(-1);        
+            List<Appointment> appointments = db.Appointments.Where(p => p.PatientId == patientId)
+                .Where(c => c.IsChanneled == false).Where(ch => ch.ChannelDate >= yesterday).ToList();
+
+            List<AppointmentViewModel> AppVMList = new List<AppointmentViewModel>();
+            foreach (Appointment item in appointments)
+            {
+                AppointmentViewModel appVM = new AppointmentViewModel();
+                appVM.Patient = db.Patients.Find(item.PatientId);
+                appVM.Doctor = db.Doctors.Find(item.DoctorId);
+                appVM.ChannelNumber = appVM.Doctor.Room.ToString() + "-" + item.ChannelNumber.ToString();
+                appVM.ReferenceNumber = item.Id;
+                appVM.IsChanneled = item.IsChanneled;
+                AppVMList.Add(appVM);
+                ViewBag.Role = role;
+            }
+            return View("AppointmentList", AppVMList);
+        }
+
+        public ActionResult ManagePatientAppointments()
+        {
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.Patients.Where(p => p.Id == userId).FirstOrDefault();
+            if(patient == null)
+            {           
+                return View("SearchPatient", db.Patients.Take(5).ToList());
+            }
+            else
+            {
+                return RedirectToAction("PatientAppointments", new { patientId = patient.Id, role = "patient" });
+            }
         }
 
 

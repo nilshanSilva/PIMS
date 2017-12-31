@@ -297,6 +297,7 @@ namespace PIMS.Controllers
             }
 
             // If we got this far, something failed, redisplay form
+            ViewBag.IsSelfRegistered = IsSelfRegistered;
             return View(model);
         }
 

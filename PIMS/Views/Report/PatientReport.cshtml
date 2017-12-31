@@ -1,0 +1,104 @@
+﻿@model List<PIMS.Models.Patient>
+@{
+    ViewBag.Title = "PatientReport";
+}
+
+<h2>Patient Report</h2>
+<hr/>
+
+<table id="patients" class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().FirstName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Surname)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().BirthDate)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Gender)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().ContactNumber)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().NIC)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().City)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Address)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().JoinedAt)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.BirthDate)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContactNumber)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.NIC)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.JoinedAt)
+                </td>
+            </tr>
+        }
+    </tbody>
+   </table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#patients").DataTable();
+        })
+
+    </script>
+
+
+}

@@ -1,0 +1,21 @@
+﻿@model List<PIMS.Models.Patient>
+@{
+    ViewBag.Title = "SearchPatient";
+}
+
+<h2>Select Patient</h2>
+<hr/>
+
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>
+            @Html.ActionLink(item.FirstName + " " + item.Surname + " (" + item.Id.ToString() + ")", "PatientAppointments", new { patientId = item.Id, role = "cashier" });
+        </li>
+    }
+</ul>
+
+
+
+
+

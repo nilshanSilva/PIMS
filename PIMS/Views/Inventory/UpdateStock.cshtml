@@ -30,6 +30,10 @@
 
         @Html.Hidden("drugId", (int)Model.Id)
 
+        @if (ViewBag.Context != null)
+        {
+        @Html.Hidden("ViewBagContext", (string)ViewBag.Context)
+        }
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -40,5 +44,12 @@
 }
 
 <div>
+    @if (ViewBag.Context == null)
+    {
     @Html.ActionLink("Back to List", "Index", new { context = "pharmacist-update-stock" })
+    }
+    else if (ViewBag.Context == "report")
+    {
+       @Html.ActionLink("Back", "InventoryReport", "Report")
+    }
 </div>

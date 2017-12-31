@@ -49,10 +49,12 @@
 {
     if (ViewBag.Role == "cashier")
     {
-        if (Model.IsPaid == false)
+        if (ViewBag.IsCancelled == null)
         {
-            using (Html.BeginForm("UpdateAppointment", "Appointment", FormMethod.Post))
+            if (Model.IsPaid == false)
             {
+                using (Html.BeginForm("UpdateAppointment", "Appointment", FormMethod.Post))
+                {
             @Html.AntiForgeryToken()
              <div class="form-horizontal">
 
@@ -72,13 +74,50 @@
                      </div>
                  </div>
              </div>
+                }
             }
-        }
-        else //If Paid
-        {
+            else //If Paid
+            {
             <h4 class="payment-message">Payment Successfull</h4>
             @Html.ActionLink("View Remaining Appointments", "PayAppointmentBill", "Appointment");
+            }
+
+            //Cancel Appointment
+            using (Html.BeginForm("UpdateAppointment", "Appointment", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+
+                    @Html.Hidden("ReferenceNumber", Model.ReferenceNumber)
+                    @Html.Hidden("ChannelNumber", Model.ChannelNumber)
+                    @Html.Hidden("PatientId", Model.Patient.Id)
+                    @Html.Hidden("DoctorId", Model.Doctor.Id)
+                    @Html.Hidden("ChannelDate", Model.ChannelDate)
+                    @Html.Hidden("ChannelFee", Model.ChannelFee)
+                    @Html.Hidden("ViewBagMessage", (string)ViewBag.Role)
+                    @Html.Hidden("IsPaid", false)
+                    @Html.Hidden("IsChanneled", false)
+                    @Html.Hidden("IsCancelRequested", true)
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Cancel Appointment" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            }
+
         }
+        else if (ViewBag.IsCancelled == true)
+        {
+            <h4 class="success-message">The Appointment was cancelled Successfully</h4>
+        }
+        else if (ViewBag.IsCancelled == false)
+        {
+            <h4 class="error-message">The Appointment could not be cancelled because the channel is within 2 hours</h4>
+        }
+
+
     }
     else if (ViewBag.Role == "doctor")
     {
@@ -123,6 +162,44 @@
              @Html.ActionLink("View Remaining Channels", "MarkChannel", "Appointment");
         }
     }
+    else if (ViewBag.Role == "patient")
+    {
+        if (ViewBag.IsCancelled == null)
+        {
+            //Cancel Appointment
+            using (Html.BeginForm("UpdateAppointment", "Appointment", FormMethod.Post))
+            {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                @Html.Hidden("ReferenceNumber", Model.ReferenceNumber)
+                @Html.Hidden("ChannelNumber", Model.ChannelNumber)
+                @Html.Hidden("PatientId", Model.Patient.Id)
+                @Html.Hidden("DoctorId", Model.Doctor.Id)
+                @Html.Hidden("ChannelDate", Model.ChannelDate)
+                @Html.Hidden("ChannelFee", Model.ChannelFee)
+                @Html.Hidden("ViewBagMessage", (string)ViewBag.Role)
+                @Html.Hidden("IsPaid", false)
+                @Html.Hidden("IsChanneled", false)
+                @Html.Hidden("IsCancelRequested", true)
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Cancel Appointment" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+            }
+        }
+        else if (ViewBag.IsCancelled == true)
+        {
+            <h4 class="success-message">The Appointment was cancelled Successfully</h4>
+        }
+        else if (ViewBag.IsCancelled == false)
+        {
+            <h4 class="error-message">The Appointment could not be cancelled because the channel is within 2 hours</h4>
+        }
+    }
 }
 
 
@@ -130,4 +207,13 @@
         .payment-message {
             color: green;
         }
+
+        .success-message {
+            color: green;
+        }
+
+        .error-message {
+            color: red;
+        }
+
     </style>

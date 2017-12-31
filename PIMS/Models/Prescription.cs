@@ -27,6 +27,10 @@ namespace PIMS.Models
         public bool IsPaid { get; set; }
 
         public bool IsCleared { get; set; }
+
+        public string Feedback { get; set; }
+
+        public bool FeedbackSubmitted { get; set; }
     }
 
     public class DrugItem

@@ -71,10 +71,10 @@
         </div>
     </div>
 
-    @Html.Hidden("IsSelfRegistered", (bool)ViewBag.IsSelfRegistered)
-
-
-
+    if (ViewBag.IsSelfRegistered != null)
+    {
+        @Html.Hidden("IsSelfRegistered", (bool)ViewBag.IsSelfRegistered)
+    }
 
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })

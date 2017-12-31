@@ -1,0 +1,19 @@
+﻿@model List<PIMS.Models.Prescription>
+@{
+    ViewBag.Title = "SelectPrescription";
+}
+
+<h2>Select Prescription</h2>
+<hr/>
+
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>
+            @Html.ActionLink(item.Id.ToString() + "-" + item.AppointmentReference.ToString() + " for " + item.Disease,
+            "SubmitFeedback", "Prescription", new { prescriptionId = item.Id }, null);
+        </li>
+    }
+</ul>
+
+

@@ -262,6 +262,31 @@ namespace PIMS.Controllers
             return View("ViewPrescription", PresVM);
         }
 
+        public ActionResult AddFeedback()
+        {
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.Patients.Where(p => p.Id == userId).FirstOrDefault();
+            List<Prescription> Prescriptions = db.Prescriptions.Where(p => p.Patient.Id == patient.Id)
+                .Where(f => f.FeedbackSubmitted != true).ToList();
+
+            return View("SelectPrescription", Prescriptions);
+        }
+
+        public ActionResult SubmitFeedback(int prescriptionId)
+        {
+            return View(db.Prescriptions.Find(prescriptionId));
+        }
+
+        public ActionResult SavePrescription(string Feedback, int prescriptionId)
+        {
+            Prescription prescriptionInDb = db.Prescriptions.Find(prescriptionId);
+            prescriptionInDb.Feedback = Feedback;
+            prescriptionInDb.FeedbackSubmitted = true;
+            db.SaveChanges();
+
+            return RedirectToAction("PatientMenu", "Menu", new { Message = "Feedback Submitted" });
+        }
+
 
 
 

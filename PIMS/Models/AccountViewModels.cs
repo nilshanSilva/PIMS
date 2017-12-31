@@ -120,7 +120,7 @@ namespace PIMS.Models
         [Required]
         public Qualification Qualification { get; set; }
 
-        [Required, Display(Name = "Channel Fee (£)")]
+        [Required, Display(Name = "Channel Fee ($)")]
         [RegularExpression("([0-9]+)", ErrorMessage = "Please enter a valid Number")]
         [Range(1, 300, ErrorMessage = "The fee must be reasonable")]
         public double ChannelFee { get; set; }
@@ -138,7 +138,7 @@ namespace PIMS.Models
         [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime ChannelEndTime { get; set; }
 
-        [ScaffoldColumn(false)]
+        [Display(Name ="Number of Patients/Day")]
         public int NumOfPatientsPerDay { get; set; }
 
         [Required]

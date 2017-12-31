@@ -27,7 +27,7 @@ namespace PIMS.Controllers
             string userId = User.Identity.GetUserId();
             Patient patient = db.Users.OfType<Patient>().Where(x => x.Id == userId).FirstOrDefault();
             if (patient != null)
-                return RedirectToAction("Index", "Home", null);
+                return RedirectToAction("PatientMenu");
 
             Doctor doctor = db.Users.OfType<Doctor>().Where(x => x.Id == userId).FirstOrDefault();
             if (doctor != null)
@@ -43,7 +43,7 @@ namespace PIMS.Controllers
                     return RedirectToAction("CashierMenu");
 
                    else if(staffMember.UserLevel == UserLevel.Medical_Superintendent)
-                    return RedirectToAction("AdminMenu"); //change this
+                    return RedirectToAction("MedicalSuperintendentMenu");
 
                    else if(staffMember.UserLevel == UserLevel.Pharmacist)
                     return RedirectToAction("PharmacistMenu");
@@ -51,6 +51,7 @@ namespace PIMS.Controllers
 
                 return View();
         }
+
 
         [HttpGet]
         public ActionResult AdminMenu(string message)
@@ -63,8 +64,12 @@ namespace PIMS.Controllers
         }
 
         [HttpGet]
-        public ActionResult PatientMenu()
+        public ActionResult PatientMenu(string Message)
         {
+            if(Message != null)
+            {
+                ViewBag.Message = Message;
+            }
             return View();
         }
 
@@ -82,6 +87,12 @@ namespace PIMS.Controllers
 
         [HttpGet]
         public ActionResult PharmacistMenu()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult MedicalSuperintendentMenu()
         {
             return View();
         }

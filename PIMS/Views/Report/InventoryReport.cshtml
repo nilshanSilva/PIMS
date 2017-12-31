@@ -1,0 +1,145 @@
+﻿@model List<PIMS.Models.Drug>
+@{
+    ViewBag.Title = "InventoryReport";
+}
+
+<h2>Inventory Report</h2>
+<hr/>
+
+<table id="inventory" class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().BrandName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().GenericName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Category)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().NetContent)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().DrugForm)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecievedPrice)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RetailPrice)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().SupplierName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Shelf)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().ReOrderLevel)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Quantity)
+            </th>
+
+            <th>
+                <p>Action</p>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BrandName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.GenericName)
+                </td>
+                @{ string category = item.Category.ToString().Replace("_", " "); }
+                <td>
+                    @Html.DisplayFor(modelItem => category)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.NetContent)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.DrugForm)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RecievedPrice)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RetailPrice)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupplierName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Shelf)
+                </td>
+
+                @{ string className = "within-level";
+                if (item.Quantity < item.ReOrderLevel)
+                {
+                    className = "level-out";
+                }
+                }
+
+                <td class=@className>
+                    @Html.DisplayFor(modelItem => item.ReOrderLevel)
+                </td>
+
+                <td class=@className>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+
+                <td>
+                    <h4>@Html.ActionLink("Update", "UpdateStock", "Inventory", new { Id = item.Id, context = "report" }, new { @class = className })</h4>
+                </td>
+
+            </tr>
+                    }
+    </tbody>
+</table>
+
+<style>
+    .level-out {
+        color: red;
+    }
+
+    .within-level {
+        color: green;
+    }
+</style>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#inventory").DataTable();
+        })
+
+    </script>
+
+
+}

@@ -61,7 +61,7 @@ namespace PIMS.Controllers
         }
 
         // GET: Inventory/Edit/5
-        public ActionResult UpdateStock(int? id)
+        public ActionResult UpdateStock(int? id, string context)
         {
             if (id == null)
             {
@@ -72,6 +72,11 @@ namespace PIMS.Controllers
             {
                 return HttpNotFound();
             }
+
+            if(context != null)
+            {
+                ViewBag.Context = context;
+            }
             return View(drug);
         }
 
@@ -80,11 +85,15 @@ namespace PIMS.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateStock( int drugId, Drug drug)
+        public ActionResult UpdateStock( int drugId, Drug drug, string ViewBagContext)
         {
                 Drug drugInDb = db.Drugs.Find(drugId);
                 drugInDb.Quantity = drug.Quantity;
                 db.SaveChanges();
+            if(ViewBagContext != null)
+            {
+                ViewBag.Context = ViewBagContext;
+            }
             return View(drugInDb);
         }
 

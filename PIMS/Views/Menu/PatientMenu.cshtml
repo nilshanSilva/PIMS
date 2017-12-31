@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "PatientMenu";
+}
+
+@if(ViewBag.Message != null)
+{
+    <h4 class="success-message">@ViewBag.Message</h4>
+}
+
+<h2>Patient Menu</h2>
+
+<ul>
+    <li>@Html.ActionLink("Make Appointment", "AppointmentMenu", "Appointment")</li>
+    <li>@Html.ActionLink("My Appointments", "ManagePatientAppointments", "Appointment")</li>
+    <li>@Html.ActionLink("Submit Feedback", "AddFeedback", "Prescription")</li>
+</ul>
+
+<style>
+    .success-message{
+        color:green;
+    }
+</style>

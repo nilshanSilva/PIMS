@@ -1,0 +1,31 @@
+﻿@model PIMS.Models.Prescription
+@{
+    ViewBag.Title = "SubmitFeedback";
+}
+
+<h2>Submit Feedback</h2>
+
+<h4>@Model.Id - @Model.AppointmentReference for @Model.Disease</h4>
+<br/>
+
+ @using (Html.BeginForm("SavePrescription", "Prescription", FormMethod.Post))
+ {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">  
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Feedback, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Feedback, new { @class = "form-control" })
+            </div>
+        </div>
+       @Html.Hidden("prescriptionId", Model.Id)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" value="Submit Feedback" />
+            </div>
+        </div>
+
+    </div>
+ }
