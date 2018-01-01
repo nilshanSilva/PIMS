@@ -78,8 +78,9 @@ namespace PIMS.Controllers
                 dummyset.TurnOver = firstYearProfit + (i * 100);
                 DummyList.Add(dummyset);
             }
-
-            return View(DummyList);
+            TurnOverViewModel TOVM = new TurnOverViewModel();
+            TOVM.DataList = DummyList;
+            return View(TOVM);
         }
 
         public ActionResult PatientReport()
