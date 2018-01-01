@@ -29,8 +29,8 @@ namespace PIMS.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            FirstRun fr = new FirstRun();
-            fr.SetUser();
+            //FirstRun fr = new FirstRun();
+            //fr.SetUser();
         }
 
     }

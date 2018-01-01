@@ -43,6 +43,7 @@ namespace PIMS.Models
         public DbSet<Prescription> Prescriptions { get; set; }
         public DbSet<DrugItem> DrugItems { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<Actions> Actions { get; set; }
 
         public static ApplicationDbContext Create()
         {

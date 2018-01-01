@@ -10,4 +10,10 @@ namespace PIMS.Models.ViewModels
         public DateTime Date { get; set; }
         public double TurnOver { get; set; }
     }
+
+    public class TurnOverViewModel
+    {
+        public List<PeriodicDataSet> DataList { get; set; }
+
+    }
 }

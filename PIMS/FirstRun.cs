@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using PIMS.Controllers;
 
-namespace PIMS
+namespace PIMS.Controllers
 {
     public class FirstRun :Controller
     {
