@@ -1,0 +1,16 @@
+﻿@model List<PIMS.Models.ViewModels.PeriodicDataSet>
+@{
+    ViewBag.Title = "YearlyTurnOverReport";
+}
+
+<h2>Yearly Turnover Graph</h2>
+<hr/>
+
+@foreach(var item in Model)
+{
+    <h4>Year : @item.Date.Year</h4>
+    <p>Profit : @item.TurnOver</p>
+    <br/>
+}
+
+

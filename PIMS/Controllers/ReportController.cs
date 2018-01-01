@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
+using PIMS.Models.ViewModels;
 
 namespace PIMS.Controllers
 {
@@ -57,12 +58,29 @@ namespace PIMS.Controllers
         //            {
         //                if (Drugs.Contains(drugitem.Drug))
         //            }
-                    
+
         //        }
         //    }
 
         //    return View();
         //}
+
+        public ActionResult YearlyTurnOverReport()
+        {
+            //Dummy Data
+            List<PeriodicDataSet> DummyList = new List<PeriodicDataSet>();
+            DateTime currenyYear = DateTime.Now.AddYears(-5);
+            double firstYearProfit = 6000;
+            for (int i = 0; i<5; i++)
+            {
+                PeriodicDataSet dummyset = new PeriodicDataSet();
+                dummyset.Date = currenyYear.AddYears(i);
+                dummyset.TurnOver = firstYearProfit + (i * 100);
+                DummyList.Add(dummyset);
+            }
+
+            return View(DummyList);
+        }
 
         public ActionResult PatientReport()
         {
